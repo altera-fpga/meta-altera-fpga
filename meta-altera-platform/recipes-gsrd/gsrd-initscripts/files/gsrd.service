@@ -1,0 +1,10 @@
+[Install]
+WantedBy=multi-user.target
+
+[Unit]
+Description=Altera SoCFPGA GSRD initialization
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/gsrd-init.sh -g start
+RemainAfterExit=yes

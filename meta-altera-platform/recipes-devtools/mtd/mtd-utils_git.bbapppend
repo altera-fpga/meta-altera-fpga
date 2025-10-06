@@ -1,0 +1,4 @@
+ALTERNATIVE:append:${PN}-ubifs = " ubiformat ubinfo"
+
+ALTERNATIVE_LINK_NAME[ubiformat] = "${sbindir}/ubiformat"
+ALTERNATIVE_LINK_NAME[ubinfo] = "${sbindir}/ubinfo"

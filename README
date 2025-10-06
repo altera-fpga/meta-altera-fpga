@@ -1,0 +1,3 @@
+applications.fpga.soc.meta-altera-fpga
+
+Altera bitbake layers for customizing and building an embedded Linux solution for SoCFPGA.

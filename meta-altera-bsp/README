@@ -1,0 +1,3 @@
+# meta-altera-bsp
+
+This bitbake layer contains Altera SoCFPGA BSP metadata such as machine configurations, boot firmware components and embedded Linux kernel.
