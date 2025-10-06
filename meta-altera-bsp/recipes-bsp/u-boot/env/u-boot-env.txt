@@ -1,0 +1,57 @@
+mmc_boot=if mmc dev ${devnum}; then devtype=mmc; run scan_dev_for_boot_part; fi
+arch=arm
+baudrate=115200
+board=agilex5-socdk
+board_name=agilex5-socdk
+boot_a_script=load ${devtype} ${devnum}:${distro_bootpart} ${scriptaddr} ${prefix}${script}; source ${scriptaddr}
+boot_extlinux=sysboot ${devtype} ${devnum}:${distro_bootpart} any ${scriptaddr} ${prefix}${boot_syslinux_conf}
+boot_net_usb_start=usb start
+boot_prefixes=/ /boot/
+boot_script_dhcp=boot.scr.uimg
+boot_scripts=boot.scr.uimg boot.scr
+boot_syslinux_conf=extlinux/extlinux.conf
+boot_targets=mmc0 qspi nand
+bootargs=console=ttyS0,115200 initrd=0x90000000 root=/dev/ram0 rw init=/sbin/init ramdisk_size=10000000 earlycon panic=-1
+custom_bootargs=
+bootcmd=run distro_bootcmd
+bootcmd_mmc0=devnum=0; run mmc_boot
+bootcmd_nand=ubi detach && setenv mtdids 'nor0=nor0,nand0=nand.0' && setenv mtdparts 'mtdparts=nor0:66m(qspi_uboot),190m(qspi_root);nand.0:2m(u-boot),500m(root)' && env select UBI; saveenv && ubi part root && ubi readvol ${scriptaddr} script && echo NAND: Trying to boot script at ${scriptaddr} && source ${scriptaddr}; echo NAND: SCRIPT FAILED: continuing...; ubi detach;
+bootcmd_qspi=ubi detach; sf probe && setenv mtdids 'nor0=nor0,nand0=nand.0' && setenv mtdparts 'mtdparts=nor0:66m(u-boot),190m(root);nand.0:2m(nand_uboot),500m(nand_root)' && env select UBI; saveenv && ubi part root && if ubi part root && ubi readvol ${scriptaddr} script; then echo QSPI: Running script from UBIFS; elif sf read ${scriptaddr} ${qspiscriptaddr} ${scriptsize}; then echo QSPI: Running script from JFFS2; fi; echo QSPI: Trying to boot script at ${scriptaddr} && source ${scriptaddr}; echo QSPI: SCRIPT FAILED: continuing...; ubi detach;
+bootdelay=5
+bootfile=kernel.itb
+bootfile=kernel.itb
+bootimagesize=0x03200000
+cpu=armv8
+distro_bootcmd=for target in ${boot_targets}; do run bootcmd_${target}; done
+fdt_addr_r=0x86000000
+kernel_addr_r=0x82000000
+linux_qspi_enable=if sf probe; then echo Enabling QSPI at Linux DTB...;fdt addr ${fdt_addr}; fdt resize;fdt set /soc/spi@108d2000 status okay;if fdt set /clocks/qspi-clk clock-frequency ${qspi_clock}; then echo QSPI clock frequency updated; elif fdt set /soc/clkmgr/clocks/qspi_clk clock-frequency ${qspi_clock}; then echo QSPI clock frequency updated; else fdt set /clocks/qspi-clk clock-frequency ${qspi_clock}; echo QSPI clock frequency updated; fi; fi
+loadaddr=0x82000000
+loadaddr=0x82000000
+mmcroot=/dev/mmcblk0p2
+mtdids=nand0=10b80000.nand.0
+mtdids=nand0=10b80000.nand.0
+mtdparts=mtdparts=10b80000.nand.0:2m(u-boot),-(root)
+mtdparts=mtdparts=10b80000.nand.0:2m(u-boot),-(root)
+nandfitboot=setenv bootargs console=ttyS0,115200 initrd=0x90000000 root=/dev/ram0 rw init=/sbin/init ramdisk_size=10000000 earlycon panic=-1 nosmp kvm-arm.mode=nvhe root=${nandroot} rw rootwait rootfstype=ubifs ubi.mtd=1; bootm ${loadaddr}
+nandfitload=ubi part root; ubi readvol ${loadaddr} kernel
+nandroot=ubi0:rootfs
+qspibootimageaddr=0x02120000
+qspiscriptaddr=0x02110000
+rsu_status=rsu dtb; rsu display_dcmf_version; rsu display_dcmf_status; rsu display_max_retry
+scan_dev_for_boot=echo Scanning ${devtype} ${devnum}:${distro_bootpart}...; for prefix in ${boot_prefixes}; do run scan_dev_for_extlinux; run scan_dev_for_scripts; done;
+scan_dev_for_boot_part=part list ${devtype} ${devnum} -bootable devplist; env exists devplist || setenv devplist 1; for distro_bootpart in ${devplist}; do if fstype ${devtype} ${devnum}:${distro_bootpart} bootfstype; then part uuid ${devtype} ${devnum}:${distro_bootpart} distro_bootpart_uuid ; run scan_dev_for_boot; fi; done; setenv devplist
+scan_dev_for_extlinux=if test -e ${devtype} ${devnum}:${distro_bootpart} ${prefix}${boot_syslinux_conf}; then echo Found ${prefix}${boot_syslinux_conf}; run boot_extlinux; echo EXTLINUX FAILED: continuing...; fi
+scan_dev_for_scripts=for script in ${boot_scripts}; do if test -e ${devtype} ${devnum}:${distro_bootpart} ${prefix}${script}; then echo Found U-Boot script ${prefix}${script}; run boot_a_script; echo SCRIPT FAILED: continuing...; fi; done
+scriptaddr=0x81000000
+scriptfile=boot.scr
+scriptsize=0x00010000
+smc_fid_rd=0xC2000007
+smc_fid_upd=0xC2000009
+smc_fid_wr=0xC2000008
+soc=socfpga
+socfpga_legacy_reset_compat=1
+ubifs_boot=if ubi part ${bootubipart} ${bootubioff} && ubifsmount ubi0:${bootubivol}; then devtype=ubi; devnum=ubi0; bootfstype=ubifs; distro_bootpart=${bootubivol}; run scan_dev_for_boot; ubifsumount; fi
+usb_boot=usb start; if usb dev ${devnum}; then devtype=usb; run scan_dev_for_boot_part; fi
+usb_ignorelist=
+vendor=altera

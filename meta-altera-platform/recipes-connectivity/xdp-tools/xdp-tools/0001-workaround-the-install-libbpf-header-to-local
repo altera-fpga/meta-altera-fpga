@@ -1,0 +1,75 @@
+From c784f253cd6d169c3a38950f7cc9c23b039328f1 Mon Sep 17 00:00:00 2001
+From: Swee Leong Ching <leong.ching.swee@intel.com>
+Date: Wed, 23 Aug 2023 10:00:44 +0800
+Subject: [PATCH] workaround the install libbpf header to local
+
+Upstream-Status: Inappropriate
+
+Signed-off-by: Swee Leong Ching <leong.ching.swee@intel.com>
+---
+ src/Makefile | 23 ++++++++++++-----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
+
+diff --git a/src/Makefile b/src/Makefile
+index e3bfafe9..bcfbf1e4 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -89,15 +89,15 @@ endif
+ 
+ # By default let the pc file itself use ${prefix} in includedir/libdir so that
+ # the prefix can be overridden at runtime (eg: --define-prefix)
+-ifndef LIBDIR
++ifndef LOCAL_LIBDIR
+ 	LIBDIR_PC := $$\{prefix\}/$(LIBSUBDIR)
+ else
+-	LIBDIR_PC := $(LIBDIR)
++	LIBDIR_PC := $(LOCAL_LIBDIR)
+ endif
+-PREFIX ?= /usr
+-LIBDIR ?= $(PREFIX)/$(LIBSUBDIR)
+-INCLUDEDIR ?= $(PREFIX)/include
+-UAPIDIR ?= $(PREFIX)/include
++LOCAL_PREFIX ?= /usr
++LOCAL_LIBDIR ?= $(LOCAL_PREFIX)/$(LIBSUBDIR)
++INCLUDEDIR ?= $(LOCAL_PREFIX)/include
++UAPIDIR ?= $(LOCAL_PREFIX)/include
+ 
+ TAGS_PROG := $(if $(shell which etags 2>/dev/null),etags,ctags)
+ 
+@@ -119,9 +119,9 @@ $(OBJDIR)/libbpf.so.$(LIBBPF_VERSION): $(SHARED_OBJS)
+ 		  -Wl,-soname,libbpf.so.$(LIBBPF_MAJOR_VERSION) \
+ 		  $^ $(ALL_LDFLAGS) -o $@
+ 
+-$(OBJDIR)/libbpf.pc: force | $(OBJDIR)
+-	$(Q)sed -e "s|@PREFIX@|$(PREFIX)|" \
+-		-e "s|@LIBDIR@|$(LIBDIR_PC)|" \
++$(OBJDIR)/libbpf.pc: force | $(LOCAL_OBJDIR)
++	$(Q)sed -e "s|@LOCAL_PREFIX@|$(LOCAL_PREFIX)|" \
++		-e "s|@LOCAL_LIBDIR@|$(LIBDIR_PC)|" \
+ 		-e "s|@VERSION@|$(LIBBPF_VERSION)|" \
+ 		< libbpf.pc.template > $@
+ 
+@@ -155,9 +155,10 @@ define do_s_install
+ endef
+ 
+ install: all install_headers install_pkgconfig
+-	$(call do_s_install,$(STATIC_LIBS) $(SHARED_LIBS),$(LIBDIR))
++	$(call do_s_install,$(STATIC_LIBS) $(SHARED_LIBS),$(LOCAL_LIBDIR))
+ 
+ install_headers:
++	$(info, INCLUDEDIR is "${INCLUDEDIR}")
+ 	$(call do_install,$(HEADERS),$(INCLUDEDIR)/bpf,644)
+ 
+ # UAPI headers can be installed by a different package so they're not installed
+@@ -166,7 +167,7 @@ install_uapi_headers:
+ 	$(call do_install,$(UAPI_HEADERS),$(UAPIDIR)/linux,644)
+ 
+ install_pkgconfig: $(PC_FILE)
+-	$(call do_install,$(PC_FILE),$(LIBDIR)/pkgconfig,644)
++	$(call do_install,$(PC_FILE),$(LOCAL_LIBDIR)/pkgconfig,644)
+ 
+ clean:
+ 	$(call msg,CLEAN)
+-- 
+2.25.1
+
