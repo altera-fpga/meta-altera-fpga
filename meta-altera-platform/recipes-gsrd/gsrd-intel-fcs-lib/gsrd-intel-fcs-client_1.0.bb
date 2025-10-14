@@ -2,10 +2,14 @@ SUMMARY="Intel FPGA Crypto Service client"
 LICENSE = "MIT-0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=6f25b4c3a6d23285f956387ab54830ad"
 
-SRC_URI = "git://github.com/altera-innersource/libraries.fpga.libfcs.git;protocol=https;branch=main;"
+FCS_REPO ?= "git://github.com/altera-fpga/libfcs.git"
+FCS_PROT ?= "https"
+FCS_BRANCH ?= "main"
+
+SRC_URI = "${FCS_REPO};protocol=${FCS_PROT};branch=${FCS_BRANCH}"
 
 PV = "1.0+git${SRCPV}"
-SRCREV="537200c779b6763d61b7b5e06a7771589869f9b9"
+SRCREV="8376964331cb220c3b4b6c436463d880e35a6032"
 DEPENDS = "gsrd-intel-fcs-lib"
 
 FILES:${PN} = "/usr/bin/*"
