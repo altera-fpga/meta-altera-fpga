@@ -2,8 +2,8 @@ require arm-trusted-firmware.inc
 
 LIC_FILES_CHKSUM = "file://docs/license.rst;md5=6ed7bace7b0bc63021c6eba7b524039e"
 
-ATF_VERSION ?= "v2.13.0"
+ATF_VERSION ?= "v2.13.1"
 ATF_BRANCH ?= "socfpga_${ATF_VERSION}"
-ATF_SRCREV ?= "116f2f97fa533e3540be97a2d9ec828f2a2b68aa"
+ATF_SRCREV ?= "376b6cd83a2ad2cc18189370fdeed2d658d2532d"
 
 SRCREV = "${ATF_SRCREV}"
