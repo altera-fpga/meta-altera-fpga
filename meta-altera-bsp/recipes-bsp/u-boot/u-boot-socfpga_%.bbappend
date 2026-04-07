@@ -18,11 +18,18 @@ do_compile:prepend() {
 }
 
 do_deploy:append() {
-	cp ${B}/socfpga_agilex5_defconfig/spl/u-boot-spl-dtb.bin ${DEPLOYDIR}/u-boot-spl-dtb.bin
-	cp ${B}/socfpga_agilex5_defconfig/spl/u-boot-spl.dtb ${DEPLOYDIR}/u-boot-spl.dtb
-	cp ${B}/socfpga_agilex5_defconfig/spl/u-boot-spl.map ${DEPLOYDIR}/u-boot-spl.map
-	cp ${B}/socfpga_agilex5_defconfig/spl/u-boot-spl ${DEPLOYDIR}/u-boot-spl
-	cp ${B}/socfpga_agilex5_defconfig/u-boot ${DEPLOYDIR}/u-boot
+	# Find the actual build config directory (includes machine name in Whinlatter)
+	config_dir=$(ls -d ${B}/*${UBOOT_DEFCONFIG}* 2>/dev/null | head -1)
+	if [ -z "$config_dir" ]; then
+		config_dir="${B}/${UBOOT_DEFCONFIG}"
+	fi
+	config_name=$(basename $config_dir)
+	
+	cp ${B}/${config_name}/spl/u-boot-spl-dtb.bin ${DEPLOYDIR}/u-boot-spl-dtb.bin
+	cp ${B}/${config_name}/spl/u-boot-spl.dtb ${DEPLOYDIR}/u-boot-spl.dtb
+	cp ${B}/${config_name}/spl/u-boot-spl.map ${DEPLOYDIR}/u-boot-spl.map
+	cp ${B}/${config_name}/spl/u-boot-spl ${DEPLOYDIR}/u-boot-spl
+	cp ${B}/${config_name}/u-boot ${DEPLOYDIR}/u-boot
 }
 
 require u-boot-socfpga-device-tree.inc

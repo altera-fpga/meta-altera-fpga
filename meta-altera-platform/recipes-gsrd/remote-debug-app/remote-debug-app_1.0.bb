@@ -16,7 +16,6 @@ SRCREV_fpga-ip-access = "df3fb3a7224aac2e55bf0af71a6c611c3cd46a8a"
 SRCREV_FORMAT = "default_fpga-ip-access"
 PV:append = "+git${SRCPV}"
 
-S = "${WORKDIR}/git"
 B = "${WORKDIR}/git"
 
 # Specify any options you want to pass to cmake using EXTRA_OECMAKE:

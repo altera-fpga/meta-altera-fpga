@@ -16,11 +16,23 @@ IMAGE_INSTALL:append = "${@' packagegroup-tsn-essential' if d.getVar('TSN_REF_SW
 REMOTE_DEBUG_APP ??= "false"
 IMAGE_INSTALL:append = "${@' remote-debug-app' if d.getVar('REMOTE_DEBUG_APP') == 'true' else ''}"
 
-COREMARK_APP ??= "false"
-IMAGE_INSTALL:append = "${@' coremark' if d.getVar('COREMARK_APP') == 'true' else ''}"
+BENCHMARK_APP_RUN_HPS_BENCHMARKS ??= "true"
+IMAGE_INSTALL:append = "${@' run-hps-benchmarks' if d.getVar('BENCHMARK_APP_RUN_HPS_BENCHMARKS') == 'true' else ''}"
 
-NUMACTL_UTIL ??= "false"
-IMAGE_INSTALL:append = "${@' numactl' if d.getVar('NUMACTL_UTIL') == 'true' else ''}"
+BENCHMARK_APP_COREMARK ??= "true"
+IMAGE_INSTALL:append = "${@' coremark' if d.getVar('BENCHMARK_APP_COREMARK') == 'true' else ''}"
+
+BENCHMARK_APP_DHRYSTONE ??= "true"
+IMAGE_INSTALL:append = "${@' dhrystone' if d.getVar('BENCHMARK_APP_DHRYSTONE') == 'true' else ''}"
+
+BENCHMARK_APP_LMBENCH ??= "true"
+IMAGE_INSTALL:append = "${@' lmbench' if d.getVar('BENCHMARK_APP_LMBENCH') == 'true' else ''}"
+
+BENCHMARK_APP_STREAM ??= "true"
+IMAGE_INSTALL:append = "${@' stream' if d.getVar('BENCHMARK_APP_STREAM') == 'true' else ''}"
+
+TOOLS_UTIL_NUMACTL ??= "false"
+IMAGE_INSTALL:append = "${@' numactl' if d.getVar('TOOLS_UTIL_NUMACTL') == 'true' else ''}"
 
 export IMAGE_BASENAME = "gsrd-console-image"
 

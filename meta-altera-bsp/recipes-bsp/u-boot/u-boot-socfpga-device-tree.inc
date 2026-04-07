@@ -35,7 +35,7 @@ do_configure:append () {
     if [ "${CUSTOM_UBOOT_DT}" = "1" ]; then
         # Overwite default device tree with custom device tree
         if [ -f "${DEVICE_TREE_PATH}/${CUSTOM_DTS_FILE}" ]; then
-            cp ${DEVICE_TREE_PATH}/${CUSTOM_DTS_FILE} ${S}/arch/arm/dts/"${@d.getVar('UBOOT_DEFAULT_DEVICE_TREE', True).replace('.dtb', '.dts')}"
+            cp ${DEVICE_TREE_PATH}/${CUSTOM_DTS_FILE} ${S}/arch/arm/dts/"${@d.getVar('UBOOT_DEVICE_TREE', True).replace('.dtb', '.dts')}"
         fi
     fi
 }

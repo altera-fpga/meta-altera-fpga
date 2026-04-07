@@ -19,20 +19,9 @@ SRC_URI = "${ATF_REPO};protocol=${ATF_PROT};branch=${ATF_BRANCH}"
 
 SRCREV ?= "${AUTOREV}"
 
-S = "${WORKDIR}/git"
+ATFPLAT = "${MACHINE_STRIP}"
 
-ATF_PLATFORM = ""
-python () {
-    import os
-
-    machine = d.getVar("MACHINE")
-    if machine and len(machine) > 1:
-        atf_platform = machine[:-1]
-        d.setVar("ATF_PLATFORM", atf_platform)
-}
-ATFPLAT = "${ATF_PLATFORM}"
-
-CFLAGS="-Wno-error=array-bounds"
+CFLAGS = "-Wno-error=array-bounds"
 
 # Let the Makefile handle setting up the CFLAGS and LDFLAGS as it is a standalone application
 EXTRA_OEMAKE = 'CROSS_COMPILE="${TARGET_PREFIX}" PLAT="${ATFPLAT}" CFLAGS="${CFLAGS}" DEPRECATED=1'

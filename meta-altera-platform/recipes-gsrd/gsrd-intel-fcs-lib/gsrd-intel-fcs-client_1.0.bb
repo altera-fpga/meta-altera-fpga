@@ -14,8 +14,6 @@ DEPENDS = "gsrd-intel-fcs-lib"
 
 FILES:${PN} = "/usr/bin/*"
 
-S = "${WORKDIR}/git"
-
 inherit cmake
 
 EXTRA_OECMAKE += "-DARCH=linux_aarch64"

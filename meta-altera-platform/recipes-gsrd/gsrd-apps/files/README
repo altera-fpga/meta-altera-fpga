@@ -33,8 +33,8 @@ Linux console over ssh or serial connection.
 These examples serve as references for users to write their own applications
 to interact with soft IP through driver developed.
 
-The binaries of these applications can be found in /home/root/intelFPGA/. Please
-'cd' to /home/root/intelFPGA to execute these applications.
+The binaries of these applications can be found in /home/root/alteraFPGA/. Please
+'cd' to /home/root/alteraFPGA to execute these applications.
 
 Example applications usages are shown below, the example applications are based
 on soft PIO driver described in Section 1.
