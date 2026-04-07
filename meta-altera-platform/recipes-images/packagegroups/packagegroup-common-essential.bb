@@ -23,9 +23,6 @@ SYSCHK_APP ??= "false"
 LED_CTRL_APP ??= "false"
 RDEPENDS:packagegroup-common-essential:append = "${@' gsrd-apps gsrd-webcontent' if d.getVar('SYSCHK_APP') == 'true' or d.getVar('LED_CTRL_APP') == 'true' else ''}"
 
-GPIO_INT_TEST ??= "false"
-RDEPENDS:packagegroup-common-essential:append = "${@' gsrd-pio-interrupt' if d.getVar('GPIO_INT_TEST') == 'true' else ''}"
-
 RDEPENDS:packagegroup-common-essential:append= "\
 	gsrd-intel-fcs-client \
 	gsrd-unilibrsu-client \

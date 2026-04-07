@@ -23,11 +23,11 @@ SRC_URI = " \
 SRCREV = "57b44fdf88bb344491118db066142938344ee3c3"
 
 FILES:${PN} = "/www/pages/* \
-	       /home/root/intelFPGA/* \
+	       /home/root/alteraFPGA/* \
 	       /home/root/README \
 	      "
 
-FILES:${PN}-dbg = "/www/pages/cgi-bin/.debug/ /usr /home/root/intelFPGA/.debug"
+FILES:${PN}-dbg = "/www/pages/cgi-bin/.debug/ /usr /home/root/alteraFPGA/.debug"
 INSANE_SKIP:${PN}-dbg = "buildpaths"
 
 SYSCHK_APP ??= "false"
@@ -56,20 +56,20 @@ do_install() {
     cd ${S}
     if [ "${SYSCHK_APP}" = "true" ] || [ "${LED_CTRL_APP}" = "true" ]; then
         install -d ${D}/www/pages/cgi-bin
-        install -d ${D}/home/root/intelFPGA
-        install -m 0755 ${WORKDIR}/sources-unpack/README ${D}/home/root/README
+        install -d ${D}/home/root/alteraFPGA
+        install -m 0755 ${WORKDIR}/README ${D}/home/root/README
     fi
     if [ "${SYSCHK_APP}" = "true" ]; then
-        install -m 0755 syschk/syschk ${D}/home/root/intelFPGA/syschk
+        install -m 0755 syschk/syschk ${D}/home/root/alteraFPGA/syschk
     fi
 
     if [ "${LED_CTRL_APP}" = "true" ]; then
         install -m 0755 blink/blink ${D}/www/pages/cgi-bin/blink
-        install -m 0755 blink/blink ${D}/home/root/intelFPGA/blink
+        install -m 0755 blink/blink ${D}/home/root/alteraFPGA/blink
         install -m 0755 toggle/toggle ${D}/www/pages/cgi-bin/toggle
-        install -m 0755 toggle/toggle ${D}/home/root/intelFPGA/toggle
+        install -m 0755 toggle/toggle ${D}/home/root/alteraFPGA/toggle
         install -m 0755 scroll_server/scroll_server ${D}/www/pages/cgi-bin/scroll_server
         install -m 0755 scroll_client/scroll_client ${D}/www/pages/cgi-bin/scroll_client
-        install -m 0755 scroll_client/scroll_client ${D}/home/root/intelFPGA/scroll_client
+        install -m 0755 scroll_client/scroll_client ${D}/home/root/alteraFPGA/scroll_client
     fi
 }

@@ -1,8 +1,8 @@
 mmc_boot=if mmc dev ${devnum}; then devtype=mmc; run scan_dev_for_boot_part; fi
 arch=arm
 baudrate=115200
-board=agilex5-socdk
-board_name=agilex5-socdk
+board=@@MACHINE_STRIP@@-socdk
+board_name=@@MACHINE_STRIP@@-socdk
 boot_a_script=load ${devtype} ${devnum}:${distro_bootpart} ${scriptaddr} ${prefix}${script}; source ${scriptaddr}
 boot_extlinux=sysboot ${devtype} ${devnum}:${distro_bootpart} any ${scriptaddr} ${prefix}${boot_syslinux_conf}
 boot_net_usb_start=usb start

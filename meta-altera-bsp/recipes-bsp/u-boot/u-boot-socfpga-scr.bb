@@ -11,19 +11,19 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 SRC_URI = "file://uboot.txt file://uboot_script.its"
 
-S = "${WORKDIR}/sources-unpack"
+S = "${WORKDIR}"
 
 do_configure[noexec] = "1"
 do_install[noexec] = "1"
 
 do_compile() {
-	mkimage -f "${WORKDIR}/sources-unpack/uboot_script.its" ${WORKDIR}/sources-unpack/boot.scr.uimg
+	mkimage -f "${S}/uboot_script.its" ${S}/boot.scr.uimg
 }
 
 do_deploy() {
 	install -d ${DEPLOYDIR}
-	install -m 0755 ${WORKDIR}/sources-unpack/uboot.txt ${DEPLOYDIR}/u-boot.txt
-	install -m 0644 ${WORKDIR}/sources-unpack/boot.scr.uimg ${DEPLOYDIR}/boot.scr.uimg
+	install -m 0755 ${S}/uboot.txt ${DEPLOYDIR}/u-boot.txt
+	install -m 0644 ${S}/boot.scr.uimg ${DEPLOYDIR}/boot.scr.uimg
 }
 
 addtask do_deploy after do_compile before do_build

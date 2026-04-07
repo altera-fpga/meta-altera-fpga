@@ -18,11 +18,11 @@ do_compile:prepend() {
 }
 
 do_deploy:append() {
-	cp ${B}/socfpga_agilex5_defconfig/spl/u-boot-spl-dtb.bin ${DEPLOYDIR}/u-boot-spl-dtb.bin
-	cp ${B}/socfpga_agilex5_defconfig/spl/u-boot-spl.dtb ${DEPLOYDIR}/u-boot-spl.dtb
-	cp ${B}/socfpga_agilex5_defconfig/spl/u-boot-spl.map ${DEPLOYDIR}/u-boot-spl.map
-	cp ${B}/socfpga_agilex5_defconfig/spl/u-boot-spl ${DEPLOYDIR}/u-boot-spl
-	cp ${B}/socfpga_agilex5_defconfig/u-boot ${DEPLOYDIR}/u-boot
+	cp ${B}/${UBOOT_DEFCONFIG}/spl/u-boot-spl-dtb.bin ${DEPLOYDIR}/u-boot-spl-dtb.bin
+	cp ${B}/${UBOOT_DEFCONFIG}/spl/u-boot-spl.dtb ${DEPLOYDIR}/u-boot-spl.dtb
+	cp ${B}/${UBOOT_DEFCONFIG}/spl/u-boot-spl.map ${DEPLOYDIR}/u-boot-spl.map
+	cp ${B}/${UBOOT_DEFCONFIG}/spl/u-boot-spl ${DEPLOYDIR}/u-boot-spl
+	cp ${B}/${UBOOT_DEFCONFIG}/u-boot ${DEPLOYDIR}/u-boot
 }
 
 require u-boot-socfpga-device-tree.inc

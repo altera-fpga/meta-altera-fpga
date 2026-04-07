@@ -11,7 +11,7 @@ inherit allarch systemd
 SRC_URI = "file://gsrd.service \
 	   file://gsrd-init.sh"
 
-S = "${WORKDIR}/sources-unpack"
+S = "${WORKDIR}"
 
 do_compile() {
 	:
@@ -21,8 +21,8 @@ do_install() {
 	install -d ${D}${systemd_unitdir}/system
 	install -d ${D}/${bindir}/
 
-	install -m 0644 ${WORKDIR}/sources-unpack/gsrd.service ${D}${systemd_unitdir}/system/
-	install -m 0744 ${WORKDIR}/sources-unpack/gsrd-init.sh ${D}/${bindir}/
+	install -m 0644 ${S}/gsrd.service ${D}${systemd_unitdir}/system/
+	install -m 0744 ${S}/gsrd-init.sh ${D}/${bindir}/
 }
 
 NATIVE_SYSTEMD_SUPPORT = "1"

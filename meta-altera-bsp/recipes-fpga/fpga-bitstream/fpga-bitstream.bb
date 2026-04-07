@@ -17,7 +17,7 @@ FPGA_CORE_PGM_ENABLE ?= "0"
 
 SRC_URI = "${@'file://${FPGA_RBF_FILE}' if d.getVar('FPGA_CORE_PGM_ENABLE', True) == '1' else ''}"
 
-S = "${WORKDIR}/sources-unpack"
+S = "${WORKDIR}"
 
 python () {
     if d.getVar('FPGA_CORE_PGM_ENABLE') != '1':
@@ -26,11 +26,11 @@ python () {
 }
 
 do_install () {
-	install -D -m 0644 ${WORKDIR}/sources-unpack/${FPGA_RBF_FILE} ${D}/boot/top.core.rbf
+	install -D -m 0644 ${S}/${FPGA_RBF_FILE} ${D}/boot/top.core.rbf
 }
 
 do_deploy () {
-	install -D -m 0644 ${WORKDIR}/sources-unpack/${FPGA_RBF_FILE} ${DEPLOYDIR}/top.core.rbf
+	install -D -m 0644 ${S}/${FPGA_RBF_FILE} ${DEPLOYDIR}/top.core.rbf
 }
 
 FILES:${PN} = "\

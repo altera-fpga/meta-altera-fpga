@@ -27,7 +27,7 @@ SRCREV = "1cb08b9d2d6390bbdaa8a82458c4d6a5c5bee828"
 
 S = "${WORKDIR}/git"
 
-FILES:${PN} += "${@"${libdir}/bpf/* /usr/lib/custom_bpf/*" if d.getVar('MACHINE', True).startswith('agilex5_dk_a5e') else "${libdir}/bpf/* ${libdir}/custom_bpf/*"}"
+FILES:${PN} += "${libdir}/bpf/* /usr/lib/custom_bpf/*"
 
 INHIBIT_PACKAGE_STRIP = "1"
 INHIBIT_SYSROOT_STRIP = "1"
@@ -36,7 +36,7 @@ INHIBIT_PACKAGE_DEBUG_SPLIT = "1"
 inherit pkgconfig
 EXTRA_OEMAKE += "-I${STAGING_INCDIR} PREFIX=${D}${prefix} LIBDIR=${D}${libdir}"
 
-CFLAGS += "-fPIC -Wno-error=calloc-transposed-args"
+CFLAGS += "-fPIC"
 INSANE_SKIP:${PN}-staticdev = "buildpaths"
 INSANE_SKIP:${PN} = "dev-so dev-deps staticdev buildpaths libdir"
 export STAGING_INCDIR
@@ -44,12 +44,16 @@ CFLAGS += "-I${STAGING_INCDIR} -I${D}${libdir}"
 
 do_configure:append() {
     # workaround to patch libbpf submodule
-    cp ${WORKDIR}/sources-unpack/0001-workaround-the-install-libbpf-header-to-local ${S}/lib/libbpf/0001-workaround-the-install-libbpf-header-to-local.patch
-    cp ${WORKDIR}/sources-unpack/0001-add-txtime-in-if_xdp.h-for-libbpf-library ${S}/lib/libbpf/0001-add-txtime-in-if_xdp.h-for-libbpf-library.patch
+    cp ${WORKDIR}/0001-workaround-the-install-libbpf-header-to-local ${S}/lib/libbpf/0001-workaround-the-install-libbpf-header-to-local.patch
+    cp ${WORKDIR}/0001-add-txtime-in-if_xdp.h-for-libbpf-library ${S}/lib/libbpf/0001-add-txtime-in-if_xdp.h-for-libbpf-library.patch
     pushd ${S}/lib/libbpf
     git am 0001-workaround-the-install-libbpf-header-to-local.patch
     git am 0001-add-txtime-in-if_xdp.h-for-libbpf-library.patch
     popd
+    
+    # Remove GCC 14-specific flags that don't exist in GCC 13
+    sed -i '/CFLAGS += -Wno-error=calloc-transposed-args/d' ${S}/lib/libbpf/src/Makefile
+    sed -i '/CFLAGS += -Wno-unknown-warning-option/d' ${S}/lib/libbpf/src/Makefile
 }
 
 do_install () {

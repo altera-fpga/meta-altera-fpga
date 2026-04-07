@@ -21,12 +21,11 @@ SRC_URI:append = " \
 	    file://validation_script.js \
 	    "
 
-S = "${WORKDIR}/sources"
-UNPACKDIR = "${S}"
+S = "${WORKDIR}"
 
 do_install() {
 	install -d ${D}/www/pages/cgi-bin
-	install -d ${D}/home/root/intelFPGA
+	install -d ${D}/home/root/alteraFPGA
 	install -m 0755 intel-logo.jpg ${D}/www/pages/
 	install -m 0755 blinkled.gif ${D}/www/pages/
 	install -m 0755 favicon.ico ${D}/www/pages/

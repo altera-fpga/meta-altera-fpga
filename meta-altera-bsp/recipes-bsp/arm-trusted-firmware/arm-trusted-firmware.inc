@@ -21,16 +21,7 @@ SRCREV ?= "${AUTOREV}"
 
 S = "${WORKDIR}/git"
 
-ATF_PLATFORM = ""
-python () {
-    import os
-
-    machine = d.getVar("MACHINE")
-    if machine and len(machine) > 1:
-        atf_platform = machine[:-1]
-        d.setVar("ATF_PLATFORM", atf_platform)
-}
-ATFPLAT = "${ATF_PLATFORM}"
+ATFPLAT = "${MACHINE_STRIP}"
 
 CFLAGS="-Wno-error=array-bounds"
 
