@@ -10,20 +10,17 @@ included in LMBench."
 SECTION = "console/utils"
 
 LICENSE = "STREAM"
-NO_GENERIC_LICENSE[STREAM] = "stream_license.txt"
+NO_GENERIC_LICENSE[STREAM] = "LICENSE.txt"
 
-LIC_FILES_CHKSUM = "file://stream_license.txt;md5=9c9fd8c5e9b6e9f7516783072fa35261"
+LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=bca8cbe07976fe64c8946378d08314b0"
 
-SRC_URI = "https://www.cs.virginia.edu/stream/FTP/Code/stream.c;name=stream \
-           file://stream_license.txt"
+SRC_URI = "git://github.com/jeffhammond/STREAM.git;protocol=https;branch=master"
 
-SRC_URI[stream.md5sum] = "dd2941e3a28ff90a79b571273c10aacf"
-SRC_URI[stream.sha256sum] = "a52bae5e175bea3f7832112af9c085adab47117f7d2ce219165379849231692b"
-
-S = "${UNPACKDIR}"
+SRCREV = "6703f7504a38a8da96b353cadafa64d3c2d7a2d3"
+PV = "1.0+git${SRCPV}"
 
 do_compile () {
-    ${CC} ${CFLAGS} ${LDFLAGS} -O3 -fopenmp -static -o stream ${UNPACKDIR}/stream.c
+    ${CC} ${CFLAGS} ${LDFLAGS} -O3 -fopenmp -static -o stream ${S}/stream.c
 }
 
 do_install () {
