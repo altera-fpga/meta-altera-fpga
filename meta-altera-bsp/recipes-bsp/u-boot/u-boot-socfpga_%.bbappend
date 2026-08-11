@@ -30,6 +30,7 @@ do_deploy:append() {
 	cp ${B}/${config_name}/spl/u-boot-spl.map ${DEPLOYDIR}/u-boot-spl.map
 	cp ${B}/${config_name}/spl/u-boot-spl ${DEPLOYDIR}/u-boot-spl
 	cp ${B}/${config_name}/u-boot ${DEPLOYDIR}/u-boot
+	cp ${B}/${config_name}/u-boot.dtb ${DEPLOYDIR}/u-boot.dtb
 }
 
 require u-boot-socfpga-device-tree.inc

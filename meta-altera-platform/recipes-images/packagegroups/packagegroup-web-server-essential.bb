@@ -7,6 +7,7 @@ inherit packagegroup
 PACKAGES = "packagegroup-web-server-essential"
 
 RDEPENDS:packagegroup-web-server-essential = "\
+	gsrd-lighttpd-conf \
 	lighttpd \
 	lighttpd-module-cgi \
 	"

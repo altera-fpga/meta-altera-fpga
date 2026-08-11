@@ -9,6 +9,9 @@ FPGA_CORE_PGM_ENABLE ?= "1"
 
 SRC_URI += "${@'file://fit_' + d.getVar('MACHINE_STRIP') + '_kernel.its' if d.getVar('FPGA_CORE_PGM_ENABLE') == '1' else 'file://fit_' + d.getVar('MACHINE_STRIP') + '_kernel_no_rbf.its'}"
 
+# Add XEN kernel configuration when HYP_BUILD is enabled
+SRC_URI:append = " ${@bb.utils.contains('HYP_BUILD', '1', 'file://configs/xen.scc', '', d)}"
+
 inherit deploy
 
 LINUXDEPLOYDIR = "${WORKDIR}/deploy-${PN}"

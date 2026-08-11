@@ -1,0 +1,87 @@
+From: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+Date: Mon, 6 Jan 2026 00:00:00 +0000
+Subject: [PATCH] libxl: constify some local variables for building with glibc 2.43
+
+glibc 2.43+ causes libxl build failures:
+
+  libxl_cpuid.c: error: assignment discards 'const' qualifier from
+  pointer target type [-Werror=discarded-qualifiers]
+    endptr = strchr(str, '=');
+
+  libxl_internal.c: error: initialization discards 'const' qualifier
+  from pointer target type [-Werror=discarded-qualifiers]
+    char *c = strrchr(s, '/');
+
+strrchr() and strchr() return const char * when passed a const char *
+argument (C standard). Add missing consts.
+
+Note in libxl_cpuid_parse_config_xend() non-const endptr still is
+needed for strtoul(). Add a second variable endptrc for strchr() uses.
+
+Upstream commit: 8f7158589979041f96da2f73e7a5f69bc06d46b7
+Upstream-Status: Backport [https://github.com/xen-project/xen/commit/8f7158589979041f96da2f73e7a5f69bc06d46b7]
+Signed-off-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Acked-by: Anthony PERARD <anthony.perard@vates.tech>
+---
+ tools/libs/light/libxl_cpuid.c    | 29 ++++++++++++++++-------------
+ tools/libs/light/libxl_internal.c |  2 +-
+ 2 files changed, 18 insertions(+), 13 deletions(-)
+
+diff --git a/tools/libs/light/libxl_cpuid.c b/tools/libs/light/libxl_cpuid.c
+--- a/tools/libs/light/libxl_cpuid.c
++++ b/tools/libs/light/libxl_cpuid.c
+@@ -439,29 +439,32 @@
+     str = endptr + 1;
+     entry = cpuid_find_match(policy, leaf, subleaf);
+     for (str = endptr + 1; *str != 0;) {
++        const char *endptrc;
++
+         if (str[0] != 'e' || str[2] != 'x') {
+             return 4;
+         }
+         value = str[1] - 'a';
+-        endptr = strchr(str, '=');
+-        if (value > 3 || endptr == NULL) {
++        endptrc = strchr(str, '=');
++        if (value > 3 || endptrc == NULL) {
+             return 4;
+         }
+-        str = endptr + 1;
+-        endptr = strchr(str, ',');
+-        if (endptr == NULL) {
+-            endptr = strchr(str, 0);
++        str = endptrc + 1;
++        endptrc = strchr(str, ',');
++        if (endptrc == NULL) {
++            endptrc = strchr(str, 0);
+         }
+-        if (endptr - str != 32) {
++        if (endptrc - str != 32) {
+             return 5;
+         }
+         entry->policy[value] = calloc(32 + 1, 1);
+         strncpy(entry->policy[value], str, 32);
+         entry->policy[value][32] = 0;
+-        if (*endptr == 0) {
++        if (*endptrc == 0) {
+             break;
+         }
+-        for (str = endptr + 1; *str == ' ' || *str == '\n'; str++);
++        for (str = endptrc + 1; *str == ' ' || *str == '\n'; str++)
++            ;
+     }
+     return 0;
+ }
+diff --git a/tools/libs/light/libxl_internal.c b/tools/libs/light/libxl_internal.c
+--- a/tools/libs/light/libxl_internal.c
++++ b/tools/libs/light/libxl_internal.c
+@@ -204,7 +204,7 @@
+ 
+ char *libxl__dirname(libxl__gc *gc, const char *s)
+ {
+-    char *c = strrchr(s, '/');
++    const char *c = strrchr(s, '/');
+ 
+     if (!c)
+         return NULL;

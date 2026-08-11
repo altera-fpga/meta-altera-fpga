@@ -11,7 +11,7 @@ SRC_URI:append = " \
 	    file://favicon.ico \
 	    file://helper_script.js \
 	    file://index.sh \
-	    file://intel-logo.jpg \
+	    file://altera-logo.jpg \
 	    file://not_found.html \
 	    file://offled.jpg \
 	    file://onled.jpg \
@@ -26,7 +26,7 @@ S = "${UNPACKDIR}"
 do_install() {
 	install -d ${D}/www/pages/cgi-bin
 	install -d ${D}/home/root/alteraFPGA
-	install -m 0755 ${UNPACKDIR}/intel-logo.jpg ${D}/www/pages/
+	install -m 0755 ${UNPACKDIR}/altera-logo.jpg ${D}/www/pages/
 	install -m 0755 ${UNPACKDIR}/blinkled.gif ${D}/www/pages/
 	install -m 0755 ${UNPACKDIR}/favicon.ico ${D}/www/pages/
 	install -m 0755 ${UNPACKDIR}/helper_script.js ${D}/www/pages/
