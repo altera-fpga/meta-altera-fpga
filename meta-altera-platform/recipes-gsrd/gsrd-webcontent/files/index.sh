@@ -22,7 +22,7 @@ agilex5e)
 agilex5e_013b)
 	DEVKIT_NAME="Agilex5 SoC Development Kit"
 	;;
-agilex5e_de25_nano)
+agilex5e_de25)
 	DEVKIT_NAME="Agilex5 SoC Development Kit"
 	;;
 agilex3)

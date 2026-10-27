@@ -3,6 +3,12 @@ require core-image-essential.inc
 
 DEPENDS:append = " bash perl gcc i2c-tools"
 
+# Enable RiscFree/Eclipse debugging by pulling the TCF agent and gdbserver into
+# the image. TOOLCHAIN_HOST_TASK adds CMake to the SDK toolchain and only takes
+# effect for `bitbake gsrd-console-image -c populate_sdk`.
+IMAGE_FEATURES:append = " eclipse-debug"
+TOOLCHAIN_HOST_TASK:append = " nativesdk-cmake"
+
 IMAGE_INSTALL:append = " packagegroup-common-essential"
 IMAGE_INSTALL:append = " packagegroup-dev-tools-essential"
 IMAGE_INSTALL:append = " packagegroup-network-essential"

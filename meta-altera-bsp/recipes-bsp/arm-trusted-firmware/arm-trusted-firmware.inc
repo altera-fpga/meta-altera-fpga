@@ -19,7 +19,7 @@ SRC_URI = "${ATF_REPO};protocol=${ATF_PROT};branch=${ATF_BRANCH}"
 
 SRCREV ?= "${AUTOREV}"
 
-ATFPLAT = "${MACHINE_STRIP}"
+ATFPLAT ?= "${MACHINE_STRIP}"
 
 CFLAGS = "-Wno-error=array-bounds"
 

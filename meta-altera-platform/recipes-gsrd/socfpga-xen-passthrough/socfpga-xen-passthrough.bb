@@ -14,7 +14,8 @@ DEPENDS += "dtc-native"
 
 # Use MACHINE_STRIP for xen-passthrough example directories
 # (e.g., agilex5e_013b, agilex5e -> agilex5; agilex3 -> agilex3)
-XEN_PASSTHROUGH_DIR = "${MACHINE_STRIP}"
+# agilex7 examples live under the legacy "agilex" directory upstream
+XEN_PASSTHROUGH_DIR = "${@'agilex' if d.getVar('MACHINE') == 'agilex7' else d.getVar('MACHINE_STRIP')}"
 
 do_compile() {
     if [ -d "${S}/${XEN_PASSTHROUGH_DIR}" ]; then

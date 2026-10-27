@@ -10,7 +10,7 @@ fdt resize
 
 fdt rm /soc@0/eccmgr
 fdt rm /soc@0/ethernet@10830000 dma-coherent
-fdt rm /soc@0/mmc0@10808000 dma-coherent
+fdt rm /soc@0/mmc@10808000 dma-coherent
 
 fdt rm /chosen bootargs
 fdt set /chosen \#address-cells <1>

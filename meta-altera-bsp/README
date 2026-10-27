@@ -1,3 +1,32 @@
 # meta-altera-bsp
 
 This bitbake layer contains Altera SoCFPGA BSP metadata such as machine configurations, boot firmware components and embedded Linux kernel.
+
+## FIT / boot.scr signing (ES-14537)
+
+SoC64 GSRD builds sign the kernel FIT (`kernel.itb`) and the U-Boot boot
+script FIT (`boot.scr.uimg`), and embed the matching public key into the
+runtime control FDT (`fdt-0` inside `u-boot.itb`).
+
+Machine configs include `boot.scr.uimg` and `kernel.itb` in `IMAGE_BOOT_FILES`
+so wic images pick them up from the BSP layer alone (not only via meta-custom).
+
+This is a lockstep change with u-boot-socfpga: enabling
+`CONFIG_BOOTSCR_FIT_SIGNATURE` in U-Boot requires this layer to ship a signed
+`boot.scr`, and vice versa, or the board stops booting. Merge order:
+u-boot-socfpga #937 (mechanisms, default-off) → this layer (signed artifacts +
+pubkey in `fdt-0`) → u-boot-socfpga #929 (flip `CONFIG_BOOTSCR_FIT_SIGNATURE=y`).
+Do not merge #929 before this layer lands.
+
+The signing key defaults to `files/keys/dev.{key,crt}`, a **development-only**
+key that is NOT a security boundary (see `files/keys/README.md`). Override
+`UBOOT_SIGN_KEYDIR` / `UBOOT_SIGN_KEYNAME` for production. The committed keydir
+path is `SOCFPGA_BSP_DEV_KEYDIR` (`SOCFPGA_REFDES_DEV_KEYDIR` is a
+backward-compatible alias).
+
+Standalone signing smoke (no full Yocto build):
+
+```bash
+bash meta-altera-bsp/scripts/smoke_fit_signing.sh
+```
+

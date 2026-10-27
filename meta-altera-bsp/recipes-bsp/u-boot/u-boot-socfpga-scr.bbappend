@@ -19,7 +19,8 @@ do_compile:append() {
         # Substitute UBOOT_DEVICE_TREE and MACHINE in files
         sed -i "s/@UBOOT_DEVICE_TREE@/${UBOOT_DEVICE_TREE}/g" "${UNPACKDIR}/uboot_xen_${MACHINE}.txt"
         sed -i "s/@MACHINE@/${MACHINE}/g" "${UNPACKDIR}/uboot_script_xen.its"
-        mkimage -f "${UNPACKDIR}/uboot_script_xen.its" ${WORKDIR}/boot.scr.xen.uimg
+        # Dev-key warn already fired from the base do_compile; only sign here.
+        mkimage -f "${UNPACKDIR}/uboot_script_xen.its" -k "${UBOOT_SIGN_KEYDIR}" -r ${WORKDIR}/boot.scr.xen.uimg
     fi
 }
 
